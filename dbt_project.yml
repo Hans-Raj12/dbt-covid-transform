@@ -1,0 +1,21 @@
+name: 'dbt_covid_transform'
+version: '1.0.0'
+config-version: 2
+
+profile: 'dbt_covid_transform'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+models:
+  dbt_covid_transform:
+    bronze:
+      +materialized: view
+    silver:
+      +materialized: view
+    gold:
+      +materialized: table

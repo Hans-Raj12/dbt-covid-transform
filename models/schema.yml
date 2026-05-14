@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: bronze_covid_data
+    description: "Raw COVID-19 data loaded directly from PostgreSQL"
+    columns:
+      - name: country
+        description: "Country name"
+        tests:
+          - not_null
+          - unique
+
+  - name: silver_covid_data
+    description: "Cleaned and filtered COVID-19 data"
+    columns:
+      - name: country
+        description: "Country name"
+        tests:
+          - not_null
+          - unique
+      - name: total_cases
+        description: "Total COVID-19 cases per country"
+        tests:
+          - not_null
+      - name: population
+        description: "Total population per country"
+        tests:
+          - not_null
+
+  - name: gold_top_affected_countries
+    description: "Top 20 most affected countries by total cases"
+    columns:
+      - name: country
+        description: "Country name"
+        tests:
+          - not_null
+          - unique
+
+  - name: gold_highest_death_rate
+    description: "Top 20 countries with highest death rate"
+    columns:
+      - name: country
+        description: "Country name"
+        tests:
+          - not_null
+
+  - name: gold_testing_coverage
+    description: "Top 20 countries by testing coverage per million"
+    columns:
+      - name: country
+        description: "Country name"
+        tests:
+          - not_null
+      - name: tests_per_million
+        description: "Number of tests per million population"
+        tests:
+          - not_null

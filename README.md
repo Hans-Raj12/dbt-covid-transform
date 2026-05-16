@@ -1,8 +1,15 @@
 # 🏗️ dbt COVID-19 Data Transform
 
-A dbt (Data Build Tool) project that transforms raw COVID-19 data following the Medallion Architecture (Bronze -> Silver -> Gold) using PostgreSQL. This project builds on top of the ELT pipeline project and demonstrates professional data modelling and transformation skills.
+ETL pipeline that extracts live COVID-19 data, transforms it using Python & Pandas, loads it into PostgreSQL, models it with dbt following Medallion Architecture, and orchestrates everything with Apache Airflow.
 
 ---
+
+## 🏛️ Pipeline Architecture
+API (disease.sh) → Extract → Transform → Load → dbt Models → Dashboard
+↑
+Orchestrated by Airflow (runs daily)
+---
+
 
 ## 🏅 Medallion Architecture
 | Layer | Model | Description |
@@ -17,23 +24,40 @@ A dbt (Data Build Tool) project that transforms raw COVID-19 data following the 
 
 ## 🛠️ Tools & Technologies
 
+- **Python** - Core programming language
+- **Pandas** - Data transformation and manipulation
+- **SQLAlchemy** - Database connection and ORM
 - **dbt** - Data transformation and modelling
 - **PostgreSQL** - Relational Database
-- **SQL** - Core transformation language 
-- **YAML** - Model documentation and testing
-
+- **Apache Airflow** - Pipeline orchestration and scheduling
+- **Google Data Studio** - Interactive dashboard and visualization
+- **Requests** - API data extraction
+- **dotenv** - Secure environment variable management
 ---
 
 ## 📁 Project Structure
 
 | File/Folder | Description |
 |---|---|
+| `dags/covid_etl_dag.py` | Airflow DAG that orchestrates the full pipeline daily |
 | `models/bronze/` | Raw layer — reads data as is from PostgreSQL |
 | `models/silver/` | Cleaning layer — filters and validates data |
 | `models/gold/` | Business layer — aggregated, analytics-ready models |
 | `models/schema.yml` | Model documentation and data tests |
 | `dbt_project.yml` | dbt project configuration |
 
+---
+
+## 🔄 Pipeline Stages
+
+| Stage | Tool | Description |
+|---|---|---|
+| **Extract** | Python, Requests | Pulls live COVID-19 data from disease.sh API across 229 countries |
+| **Transform** | Python, Pandas | Cleans data and engineers metrics like death rate and recovery rate |
+| **Load** | SQLAlchemy, PostgreSQL | Stores structured data into PostgreSQL |
+| **Model** | dbt | Transforms data through Bronze → Silver → Gold layers |
+| **Orchestrate** | Apache Airflow | Runs the full pipeline automatically every day |
+| **Visualize** | Looker Studio | Interactive dashboard built on Gold layer models |
 
 ---
 
@@ -47,7 +71,7 @@ cd dbt-covid-transform
 
 **2. Install dbt**
 ```bash
-pip3 install dbt-postgres
+pip3 install pandas requests sqlalchemy psycopg2-binary python-dotenv dbt-postgres apache-airflow
 ```
 
 **3. Set up your profiles.yml at ~/.dbt/profiles.yml**
@@ -66,31 +90,28 @@ dbt_covid_transform:
         threads: 1
 ```
 
-**4. Run the models**
+**4. Copy the DAG to Airflow**
 ```bash
-dbt run
+cp dags/covid_etl_dag.py ~/airflow/dags/
 ```
 
-**5. Run the tests**
+**5. Start Airflow and trigger the pipeline**
 ```bash
-dbt test
+airflow standalone
 ```
+
+
+Then open `http://localhost:8080` and trigger the `covid_etl_pipeline` DAG.
 
 ---
 
-## 📊 Data Models Overview
+## 📊 Live Dashboard
 
-**Bronze - Raw Layer**
-Reads raw COVID-19 data directly from PostgreSQL as loaded by the ETL pipeline.
+👉 [COVID-19 Global Data Dashboard](
+https://datastudio.google.com/reporting/bc2ab8f9-f217-45f3-bc5c-c223f775e236
 
-**Silver - Cleaning**
-Filters out countries with zero cases, zero population, and zero test to ensure only meaningful data flows into the gold layer.
+) — Built on dbt Gold layer models using Google Looker Studio
 
-**Gold- Business Layer**
-Three business ready models answering real analytical questions:
-- which countries were most affected?
-- which countries had the highest death rates?
-- which countries had the best testing coverage?
 
 ---
 

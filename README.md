@@ -5,9 +5,7 @@ ETL pipeline that extracts live COVID-19 data, transforms it using Python & Pand
 ---
 
 ## 🏛️ Pipeline Architecture
-API (disease.sh) → Extract → Transform → Load → dbt Models → Dashboard
-↑
-Orchestrated by Airflow (runs daily)
+API (disease.sh) → Extract → Transform → Load → dbt Models → Dashboard → Orchestrated by Airflow (runs daily)
 ---
 
 
@@ -107,10 +105,7 @@ Then open `http://localhost:8080` and trigger the `covid_etl_pipeline` DAG.
 
 ## 📊 Live Dashboard
 
-👉 [COVID-19 Global Data Dashboard](
-https://datastudio.google.com/reporting/bc2ab8f9-f217-45f3-bc5c-c223f775e236
-
-) — Built on dbt Gold layer models using Google Looker Studio
+👉 [COVID-19 Global Data Dashboard](https://datastudio.google.com/reporting/bc2ab8f9-f217-45f3-bc5c-c223f775e236) — Built on dbt Gold layer models using Google Looker Studio
 
 
 ---
